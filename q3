@@ -1,0 +1,214 @@
+main activity.java
+
+package com.example.hello4;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    ListView nameListView ;
+    String[] names = {"c1", "c2", "c3"};
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nameListView = findViewById(R.id.nameListView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names);
+        nameListView.setAdapter(adapter);
+        nameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedName = names[position];
+                String[] details = getCandidateDetails(selectedName);
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                intent.putExtra("name", selectedName);
+                intent.putExtra("rollNo", details[0]);
+                intent.putExtra("age", details[1]);
+                intent.putExtra("experience", details[2]);
+                startActivity(intent);
+            }
+
+        });
+
+    }
+
+    private String[] getCandidateDetails(String name) {
+        String[] details = new String[3];
+        // Sample data - Replace with actual data retrieval logic
+        if(name.equals("c1")) {
+            details[0] = "101"; // Roll Number
+            details[1] = "25";  // Age
+            details[2] = "3 years"; // Experience
+        } else if (name.equals("c2")) {
+            details[0] = "102";
+            details[1] = "28";
+            details[2] = "5 years";
+        } else if (name.equals("c3")) {
+            details[0] = "103";
+            details[1] = "30";
+            details[2] = "7 years";
+        }
+        return details;
+    }
+}
+
+
+
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <ListView
+        android:id="@+id/nameListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+mainactivity2.java
+
+package com.example.hello4;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity2 extends AppCompatActivity {
+
+    TextView nameTextView, rollNoTextView, ageTextView, experienceTextView;
+    Button backButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+
+        nameTextView = findViewById(R.id.nameTextView);
+        rollNoTextView = findViewById(R.id.rollNoTextView);
+        ageTextView = findViewById(R.id.ageTextView);
+        experienceTextView = findViewById(R.id.experienceTextView);
+
+        backButton = findViewById(R.id.backButton);
+
+        Intent intent = getIntent();
+        if(intent != null) {
+            String name = intent.getStringExtra("name");
+            String rollNo = intent.getStringExtra("rollNo");
+            String age = intent.getStringExtra("age");
+            String experience = intent.getStringExtra("experience");
+
+            nameTextView.setText(name);
+            rollNoTextView.setText(rollNo);
+            ageTextView.setText(age);
+            experienceTextView.setText(experience);
+        }
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
+}
+
+
+
+
+
+activity_main2.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.147" />
+
+    <TextView
+        android:id="@+id/rollNoTextView"
+        android:layout_width="58dp"
+        android:layout_height="19dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.214" />
+
+    <TextView
+        android:id="@+id/ageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.269" />
+
+    <TextView
+        android:id="@+id/experienceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.324" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
