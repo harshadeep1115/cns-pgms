@@ -1,0 +1,150 @@
+.txt
+user1   password1
+user2   password2
+user3   user1password3
+
+
+
+
+
+package com.example.q6;
+
+import android.app.AlertDialog;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import androidx.appcompat.app.AppCompatActivity;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText usernameEditText, passwordEditText;
+    private Map<String, String> userCredentials = new HashMap<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        usernameEditText = findViewById(R.id.usernameEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+
+        loadUserCredentials();
+    }
+
+    private void loadUserCredentials() {
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getAssets().open("user_credentials.txt")));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Log.d("MainActivity", "Read line: " + line); // Log the line read
+                String[] tokens = line.split("\\s+"); // Split by whitespace
+                if (tokens.length == 2) {
+                    userCredentials.put(tokens[0], tokens[1]);
+                    Log.d("MainActivity", "Loaded user: " + tokens[0] + " with password: " + tokens[1]);
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onLoginClick(View view) {
+        String username = usernameEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        Log.d("MainActivity", "Username entered: " + username);
+        Log.d("MainActivity", "Password entered: " + password);
+
+        if (userCredentials.containsKey(username) && userCredentials.get(username).equals(password)) {
+            showDialog("Login Successful", "Welcome, " + username + "!");
+        } else {
+            showDialog("Login Failed", "Invalid username or password.");
+        }
+    }
+
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+}
+
+
+
+xml:
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:layout_margin="16dp"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_margin="16dp"
+        android:layout_below="@id/usernameEditText"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_below="@id/passwordEditText"
+        android:layout_centerHorizontal="true"
+        android:onClick="onLoginClick"/>
+</RelativeLayout>
+
+
+
+
+
+manifest:
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Q6"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

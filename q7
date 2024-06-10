@@ -1,0 +1,128 @@
+package com.example.q7;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+    private EditText userNameEdt, userEmailEdt, userPasswordEdt;
+    private Button registerBtn;
+    private DBHandler dbHandler;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        userNameEdt = findViewById(R.id.idEdtUserName);
+        userEmailEdt = findViewById(R.id.idEdtUserEmail);
+        userPasswordEdt = findViewById(R.id.idEdtUserPassword);
+        registerBtn = findViewById(R.id.idBtnRegister);
+        dbHandler = new DBHandler(MainActivity.this);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userName = userNameEdt.getText().toString();
+                String userEmail = userEmailEdt.getText().toString();
+                String userPassword = userPasswordEdt.getText().toString();
+                if (userName.isEmpty() || userEmail.isEmpty() ||
+                        userPassword.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter all the data..", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                dbHandler.addNewUser(userName, userEmail, userPassword);
+                Toast.makeText(MainActivity.this, "User registered successfully.",
+                        Toast.LENGTH_SHORT).show();
+                userNameEdt.setText("");
+                userEmailEdt.setText("");
+                userPasswordEdt.setText("");
+            }
+        });
+    }
+}
+
+
+
+xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <EditText
+        android:id="@+id/idEdtUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Username" />
+    <EditText
+        android:id="@+id/idEdtUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Email" />
+    <EditText
+        android:id="@+id/idEdtUserPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Password"
+        android:inputType="textPassword" />
+    <Button
+        android:id="@+id/idBtnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Register"
+        android:textAllCaps="false" />
+</LinearLayout>
+
+
+
+
+
+DBHandler.java
+
+package com.example.q7;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+public class DBHandler extends SQLiteOpenHelper {
+    private static final String DB_NAME = "userdb";
+    private static final int DB_VERSION = 1;
+    private static final String TABLE_NAME = "users";
+    private static final String ID_COL = "id";
+    private static final String NAME_COL = "name";
+    private static final String EMAIL_COL = "email";
+    private static final String PASSWORD_COL = "password";
+    public DBHandler(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String query = "CREATE TABLE " + TABLE_NAME + " ("
+                + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + NAME_COL + " TEXT,"
+                + EMAIL_COL + " TEXT,"
+                + PASSWORD_COL + " TEXT)";
+        db.execSQL(query);
+    }
+    public void addNewUser(String userName, String userEmail, String
+            userPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NAME_COL, userName);
+        values.put(EMAIL_COL, userEmail);
+        values.put(PASSWORD_COL, userPassword);
+        db.insert(TABLE_NAME, null, values);
+        db.close();
+    }
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+}

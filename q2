@@ -1,0 +1,467 @@
+//linear layout
+package com.example.q2_ll;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    private EditText editTextUserName, editTextPassword, editTextAddress,  editTextAge;
+    private RadioButton radioButtonMale, radioButtonFemale;
+    private DatePicker datePicker;
+    private Spinner spinnerState;
+    private TextView textViewResult;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editTextUserName = findViewById(R.id.editTextUserName);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        editTextAge = findViewById(R.id.editTextAge);
+        radioButtonMale = findViewById(R.id.radioButtonMale);
+        radioButtonFemale = findViewById(R.id.radioButtonFemale);
+        datePicker = findViewById(R.id.datePicker);
+        spinnerState = findViewById(R.id.spinnerState);
+        textViewResult = findViewById(R.id.textViewResult);
+        setupSpinner();
+    }
+    private void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(  this,
+                R.array.states_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerState.setAdapter(adapter);
+
+    }
+    public void onSubmitClick(View view) {
+        String userName = editTextUserName.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String address = editTextAddress.getText().toString();
+        String age = editTextAge.getText().toString();
+        String gender = radioButtonMale.isChecked() ? "Male" : "Female";
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth() + 1; // Months are 0-indexed
+        int year = datePicker.getYear();
+        String dateOfBirth = String.format("%02d-%02d-%04d", day, month, year);
+        String state = spinnerState.getSelectedItem().toString();
+        String result = "User Name: " + userName +
+                "\nPassword: " + password +
+                "\nAddress: " + address +
+                "\nAge: " + age +
+                "\nGender: " + gender +
+                "\nDate of Birth: " + dateOfBirth +
+                "\nState: " + state;  textViewResult.setText(result);
+    }
+}
+
+
+
+xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+    <Button
+        android:id="@+id/dial_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dial a Number" />
+    <Button
+        android:id="@+id/website_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Website" />
+    <Button
+        android:id="@+id/sms_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS" />
+</LinearLayout>
+
+
+manifest:
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Q4"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+
+
+
+string.xml
+<resources>
+    <string-array name="states_array">
+        <item>State 1</item>
+        <item>State 2</item>
+        <item>State 3</item>
+        <!-- Add more states as needed -->
+    </string-array>  </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//relative layout
+package com.example.q2_rl;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    private EditText editTextUserName, editTextPassword, editTextAddress,
+            editTextAge;
+    private RadioButton radioButtonMale, radioButtonFemale;
+    private DatePicker datePicker;
+    private Spinner spinnerState;
+    private TextView textViewResult;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editTextUserName = findViewById(R.id.editTextUserName);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        editTextAge = findViewById(R.id.editTextAge);
+        radioButtonMale = findViewById(R.id.radioButtonMale);
+        radioButtonFemale = findViewById(R.id.radioButtonFemale);
+        datePicker = findViewById(R.id.datePicker);
+        spinnerState = findViewById(R.id.spinnerState);
+        textViewResult = findViewById(R.id.textViewResult);
+        setupSpinner();
+    }
+    private void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.states_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerState.setAdapter(adapter);
+    }
+    public void onSubmitClick(View view) {
+        String userName = editTextUserName.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String address = editTextAddress.getText().toString();
+        String age = editTextAge.getText().toString();
+        String gender = radioButtonMale.isChecked() ? "Male" : "Female";
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth() + 1; // Months are 0-indexed
+        int year = datePicker.getYear();
+        String dateOfBirth = String.format("%02d-%02d-%04d", day, month, year);
+        String state = spinnerState.getSelectedItem().toString();
+        String result = "User Name: " + userName +
+                "\nPassword: " + password +
+                "\nAddress: " + address +
+                "\nAge: " + age +
+                "\nGender: " + gender +
+                "\nDate of Birth: " + dateOfBirth +
+                "\nState: " + state;
+        textViewResult.setText(result);
+    }
+}
+
+
+xml:
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="User Name"
+        android:layout_alignParentTop="true"/>
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_below="@id/editTextUserName"
+        android:layout_marginTop="16dp"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/editTextAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address"
+        android:layout_below="@id/editTextPassword"
+        android:layout_marginTop="16dp"/>
+    <EditText
+        android:id="@+id/editTextAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Age"
+        android:layout_below="@id/editTextAddress"
+        android:layout_marginTop="16dp"
+        android:inputType="number"/>
+    <RadioGroup
+        android:id="@+id/radioGroupGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/editTextAge"
+        android:layout_marginTop="16dp">
+        <RadioButton
+            android:id="@+id/radioButtonMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"/>
+        <RadioButton
+            android:id="@+id/radioButtonFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"/>
+    </RadioGroup>
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroupGender"
+        android:layout_marginTop="16dp"/>
+    <Spinner
+        android:id="@+id/spinnerState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/datePicker"
+        android:layout_marginTop="16dp"/>
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:onClick="onSubmitClick"
+        android:layout_below="@id/spinnerState"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonSubmit"
+        android:layout_marginTop="16dp"/>
+</RelativeLayout>
+</ScrollView>
+
+
+
+
+
+
+
+
+
+grid layout
+
+
+package com.example.q2_gl;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    private EditText editTextUserName, editTextPassword, editTextAddress,
+            editTextAge;
+    private RadioButton radioButtonMale, radioButtonFemale;
+    private DatePicker datePicker;
+    private Spinner spinnerState;
+    private TextView textViewResult;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editTextUserName = findViewById(R.id.editTextUserName);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        editTextAge = findViewById(R.id.editTextAge);
+        radioButtonMale = findViewById(R.id.radioButtonMale);
+        radioButtonFemale = findViewById(R.id.radioButtonFemale);
+        datePicker = findViewById(R.id.datePicker);
+        spinnerState = findViewById(R.id.spinnerState);
+        textViewResult = findViewById(R.id.textViewResult);
+        setupSpinner();
+    }
+    private void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.states_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerState.setAdapter(adapter);
+    }
+    public void onSubmitClick(View view) {
+        String userName = editTextUserName.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String address = editTextAddress.getText().toString();
+        String age = editTextAge.getText().toString();
+        String gender = radioButtonMale.isChecked() ? "Male" : "Female";
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth() + 1; // Months are 0-indexed
+        int year = datePicker.getYear();
+        String dateOfBirth = String.format("%02d-%02d-%04d", day, month, year);
+        String state = spinnerState.getSelectedItem().toString();
+        String result = "User Name: " + userName +
+                "\nPassword: " + password +
+                "\nAddress: " + address +
+                "\nAge: " + age +
+                "\nGender: " + gender +
+                "\nDate of Birth: " + dateOfBirth +
+                "\nState: " + state;
+        textViewResult.setText(result);
+    }
+}
+
+
+
+
+
+
+xml;
+
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:rowCount="10"
+    android:padding="16dp">
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="User Name"
+        android:layout_columnSpan="2"/>
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_columnSpan="2"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/editTextAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address"
+        android:layout_columnSpan="2"/>
+    <EditText
+        android:id="@+id/editTextAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Age"
+        android:layout_columnSpan="2"
+        android:inputType="number"/>
+    <RadioGroup
+        android:id="@+id/radioGroupGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_columnSpan="2">
+        <RadioButton
+            android:id="@+id/radioButtonMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"/>
+        <RadioButton
+            android:id="@+id/radioButtonFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"/>
+    </RadioGroup>
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"/>
+    <Spinner
+        android:id="@+id/spinnerState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"/>
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:onClick="onSubmitClick"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"/>
+</GridLayout>
+</ScrollView>
